@@ -85,13 +85,18 @@
     <h2>Recent Transactions</h2>
 
     <input
-        type="text"
-        id="searchInput"
-        placeholder="Search by category..."
-    >
+    type="text"
+    id="searchInput"
+    placeholder="Search by category..."
+>
 
-    <br><br>
+<select id="filterType">
+    <option value="All">All</option>
+    <option value="Income">Income</option>
+    <option value="Expense">Expense</option>
+</select>
 
+<br><br>
         <table>
 
             <thead>

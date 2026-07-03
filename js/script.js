@@ -43,7 +43,7 @@ if (form) {
 
 const tableBody = document.getElementById("transactionTable");
 const searchInput = document.getElementById("searchInput");
-
+const filterType = document.getElementById("filterType");
 if (tableBody) {
 
     let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
@@ -59,9 +59,14 @@ if (tableBody) {
 
         transactions.forEach(function(transaction, index){
 
-            if (
-                transaction.category.toLowerCase().includes(searchText.toLowerCase())
-            ) {
+            const matchesSearch =
+    transaction.category.toLowerCase().includes(searchText.toLowerCase());
+
+const matchesFilter =
+    filterType.value === "All" ||
+    transaction.type === filterType.value;
+
+if (matchesSearch && matchesFilter) {
 
                 count++;
 
@@ -101,7 +106,9 @@ if (tableBody) {
     searchInput.addEventListener("keyup", function () {
         displayTransactions(searchInput.value);
     });
-
+filterType.addEventListener("change", function () {
+    displayTransactions(searchInput.value);
+});
 }
 
 // ----------------------
