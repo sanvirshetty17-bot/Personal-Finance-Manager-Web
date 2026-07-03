@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Personal Finance Manager</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            💰 Finance Manager
+        </div>
+
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="add-transaction.html">Add Transaction</a></li>
+        </ul>
+
+    </nav>
+
+    <!-- Dashboard Header -->
+
+    <section class="dashboard-header">
+
+        <h1>Dashboard</h1>
+
+        <p>Track your finances at a glance.</p>
+
+    </section>
+
+    <!-- Summary Cards -->
+
+    <section class="cards">
+
+        <div class="card">
+            <i class="fa-solid fa-wallet"></i>
+            <h3>Total Income</h3>
+            <h2 id="totalIncome">₹0</h2>
+        </div>
+
+        <div class="card">
+            <i class="fa-solid fa-money-bill-wave"></i>
+            <h3>Total Expense</h3>
+            <h2 id="totalExpense">₹0</h2>
+        </div>
+
+        <div class="card">
+            <i class="fa-solid fa-building-columns"></i>
+            <h3>Balance</h3>
+            <h2 id="balance">₹0</h2>
+        </div>
+
+        <div class="card">
+            <i class="fa-solid fa-list"></i>
+            <h3>Transactions</h3>
+            <h2 id="transactionCount">0</h2>
+        </div>
+
+    </section>
+
+    <!-- Income vs Expense Chart -->
+
+    <section class="chart-container">
+
+        <h2>Income vs Expense Chart</h2>
+
+        <canvas id="financeChart"></canvas>
+
+    </section>
+
+    <!-- Recent Transactions -->
+
+    <section class="transactions">
+
+        <h2>Recent Transactions</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="transactionTable">
+
+                <!-- Transactions inserted by JavaScript -->
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+    <!-- Quick Actions -->
+
+    <section class="actions">
+
+        <h2>Quick Actions</h2>
+
+        <button>Add Income</button>
+
+        <button>Add Expense</button>
+
+        <button>Monthly Report</button>
+
+    </section>
+
+    <!-- Footer -->
+
+    <footer>
+
+        <p>© 2026 Personal Finance Manager</p>
+
+    </footer>
+
+    <!-- Chart.js -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Your JavaScript -->
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>
