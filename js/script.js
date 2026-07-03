@@ -37,51 +37,72 @@ if (form) {
 }
 
 
-// ----------------------
+// // ----------------------
 // DASHBOARD PAGE
 // ----------------------
 
 const tableBody = document.getElementById("transactionTable");
+const searchInput = document.getElementById("searchInput");
 
 if (tableBody) {
 
     let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
 
-    tableBody.innerHTML = "";
+    function displayTransactions(searchText = "") {
 
-    
+        tableBody.innerHTML = "";
 
-    transactions.forEach(function (transaction, index) {
+        totalIncome = 0;
+        totalExpense = 0;
 
-        tableBody.innerHTML += `
-        <tr>
-            <td>${transaction.date}</td>
-            <td>${transaction.type}</td>
-            <td>${transaction.category}</td>
-            <td>₹${transaction.amount}</td>
-            <td>
-                <button onclick="editTransaction(${index})">✏️</button>
-                <button onclick="deleteTransaction(${index})">🗑️</button>
-            </td>
-        </tr>
-        `;
+        let count = 0;
 
-        if (transaction.type === "Income") {
-            totalIncome += Number(transaction.amount);
-        } else {
-            totalExpense += Number(transaction.amount);
-        }
+        transactions.forEach(function(transaction, index){
 
+            if (
+                transaction.category.toLowerCase().includes(searchText.toLowerCase())
+            ) {
+
+                count++;
+
+                tableBody.innerHTML += `
+                <tr>
+                    <td>${transaction.date}</td>
+                    <td>${transaction.type}</td>
+                    <td>${transaction.category}</td>
+                    <td>₹${transaction.amount}</td>
+                    <td>
+                        <button onclick="editTransaction(${index})">✏️</button>
+                        <button onclick="deleteTransaction(${index})">🗑️</button>
+                    </td>
+                </tr>
+                `;
+
+                if (transaction.type === "Income") {
+                    totalIncome += Number(transaction.amount);
+                } else {
+                    totalExpense += Number(transaction.amount);
+                }
+
+            }
+
+        });
+
+        const balance = totalIncome - totalExpense;
+
+        document.getElementById("totalIncome").textContent = "₹" + totalIncome;
+        document.getElementById("totalExpense").textContent = "₹" + totalExpense;
+        document.getElementById("balance").textContent = "₹" + balance;
+        document.getElementById("transactionCount").textContent = count;
+    }
+
+    displayTransactions();
+
+    searchInput.addEventListener("keyup", function () {
+        displayTransactions(searchInput.value);
     });
 
-    const balance = totalIncome - totalExpense;
-
-    document.getElementById("totalIncome").textContent = "₹" + totalIncome;
-    document.getElementById("totalExpense").textContent = "₹" + totalExpense;
-    document.getElementById("balance").textContent = "₹" + balance;
-    document.getElementById("transactionCount").textContent = transactions.length;
 }
-
 
 // ----------------------
 // DELETE TRANSACTION
