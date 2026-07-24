@@ -257,3 +257,84 @@ textarea{
     border-radius:8px;
     margin-bottom:20px;
 }
+#filterType{
+    padding:10px;
+    font-size:16px;
+    border-radius:8px;
+    margin-left:10px;
+}
+/* ===========================
+   Responsive Design
+=========================== */
+
+@media (max-width: 768px) {
+
+    nav{
+        flex-direction: column;
+        padding:20px;
+    }
+
+    nav ul{
+        flex-direction: column;
+        gap:15px;
+        margin-top:15px;
+        text-align:center;
+    }
+
+    .hero h1{
+        font-size:36px;
+    }
+
+    .hero p{
+        font-size:18px;
+    }
+
+    .features{
+        grid-template-columns:1fr;
+        padding:20px;
+    }
+
+   .cards{
+    grid-template-columns:1fr;
+    gap:20px;
+}
+
+.card{
+    padding:30px 20px;
+    min-height:180px;
+}
+
+.card h3{
+    margin-top:15px;
+    margin-bottom:10px;
+}
+
+.card h2{
+    font-size:30px;
+}
+
+    table{
+        width:100%;
+        display:block;
+        overflow-x:auto;
+    }
+
+    #searchInput{
+        width:100%;
+        margin-bottom:10px;
+    }
+
+    #filterType{
+        width:100%;
+        margin-left:0;
+    }
+
+    .form-container{
+        width:95%;
+        padding:20px;
+    }
+
+   .actions button{
+    width:100%;
+    margin-top:15px;
+}
