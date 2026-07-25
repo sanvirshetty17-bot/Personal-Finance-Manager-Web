@@ -184,3 +184,44 @@ function deleteTransaction(index) {
         location.reload();
     }
 }
+// =========================
+// Expenses by Category Chart
+// =========================
+
+// Reuse the existing 'transactions' array
+const categories = {};
+
+transactions.forEach(transaction => {
+    if (transaction.type === "Expense") {
+        categories[transaction.category] =
+            (categories[transaction.category] || 0) + Number(transaction.amount);
+    }
+});
+
+const categoryCanvas = document.getElementById("categoryChart");
+
+if (categoryCanvas) {
+
+    const categoryCtx = categoryCanvas.getContext("2d");
+
+    new Chart(categoryCtx, {
+        type: "bar",
+        data: {
+            labels: Object.keys(categories),
+            datasets: [{
+                label: "Expenses (₹)",
+                data: Object.values(categories),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+}
