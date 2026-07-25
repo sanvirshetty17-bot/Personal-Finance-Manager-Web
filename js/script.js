@@ -61,17 +61,29 @@ window.location.href = "dashboard.html";
 const tableBody = document.getElementById("transactionTable");
 
 if (tableBody) {
-const searchInput = document.getElementById("searchInput");
 
-searchInput.addEventListener("keyup", function () {
+const searchInput = document.getElementById("searchInput");
+const filterType = document.getElementById("filterType");
+
+let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+
+
+searchInput.addEventListener("keyup", function(){
     displayTransactions(searchInput.value);
 });
-    let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
 
-    displayTransactions();
-    function displayTransactions(searchText = "") {
 
-   function displayTransactions(searchText = "") {
+filterType.addEventListener("change", function(){
+    displayTransactions(searchInput.value);
+});
+
+
+
+
+displayTransactions();
+
+
+function displayTransactions(searchText = "") {
 
     tableBody.innerHTML = "";
 
@@ -80,12 +92,24 @@ searchInput.addEventListener("keyup", function () {
 
     let count = 0;
 
-    transactions.forEach(function(transaction, index) {
+
+    transactions.forEach(function(transaction,index){
+
 
         const matchesSearch =
-            transaction.category.toLowerCase().includes(searchText.toLowerCase());
+        transaction.category.toLowerCase().includes(searchText.toLowerCase()) ||
+        transaction.description.toLowerCase().includes(searchText.toLowerCase()) ||
+        transaction.type.toLowerCase().includes(searchText.toLowerCase());
 
-        if (matchesSearch) {
+
+        const matchesFilter =
+        filterType.value === "All" ||
+        transaction.type === filterType.value;
+
+
+
+        if(matchesSearch && matchesFilter){
+
 
             tableBody.innerHTML += `
             <tr>
@@ -100,11 +124,14 @@ searchInput.addEventListener("keyup", function () {
             </tr>
             `;
 
+
             count++;
 
-            if (transaction.type === "Income") {
+
+            if(transaction.type==="Income"){
                 totalIncome += Number(transaction.amount);
-            } else {
+            }
+            else{
                 totalExpense += Number(transaction.amount);
             }
 
@@ -112,11 +139,48 @@ searchInput.addEventListener("keyup", function () {
 
     });
 
-    const balance = totalIncome - totalExpense;
 
-    document.getElementById("totalIncome").textContent = "₹" + totalIncome;
-    document.getElementById("totalExpense").textContent = "₹" + totalExpense;
-    document.getElementById("balance").textContent = "₹" + balance;
-    document.getElementById("transactionCount").textContent = count;
+    document.getElementById("totalIncome").textContent="₹"+totalIncome;
+    document.getElementById("totalExpense").textContent="₹"+totalExpense;
+    document.getElementById("balance").textContent="₹"+(totalIncome-totalExpense);
+    document.getElementById("transactionCount").textContent=count;
+const ctx = document.getElementById("financeChart");
 
+if (ctx) {
+
+    if (window.financeChart) {
+        window.financeChart.destroy();
+    }
+
+    window.financeChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Income", "Expense"],
+            datasets: [{
+                label: "Amount (₹)",
+                data: [totalIncome, totalExpense]
+            }]
+        },
+       options: {
+    responsive: true
+}
+    });
+
+}
+}
+
+}
+function editTransaction(index) {
+    localStorage.setItem("editIndex", index);
+    window.location.href = "add-transaction.html";
+}
+
+function deleteTransaction(index) {
+    let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+
+    if (confirm("Delete this transaction?")) {
+        transactions.splice(index, 1);
+        localStorage.setItem("transactions", JSON.stringify(transactions));
+        location.reload();
+    }
 }
