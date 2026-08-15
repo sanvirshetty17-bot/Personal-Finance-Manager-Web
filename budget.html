@@ -5,8 +5,7 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Budget | Personal Finance Manager</title>
 
@@ -167,35 +166,64 @@
 
     <script>
 
-        // Load saved budget
+        // =========================
+        // LOAD DATA
+        // =========================
 
         let budget =
             Number(localStorage.getItem("monthlyBudget")) || 0;
 
 
-        // Load transactions
-
         const transactions =
             JSON.parse(localStorage.getItem("transactions")) || [];
 
 
-        // Calculate total expenses
+        // =========================
+        // CALCULATE CURRENT MONTH EXPENSES
+        // =========================
 
         let spent = 0;
+
+        const currentDate = new Date();
+
+        const currentMonth = currentDate.getMonth();
+
+        const currentYear = currentDate.getFullYear();
 
 
         transactions.forEach(function(transaction) {
 
-            if (transaction.type === "Expense") {
+            if (transaction.type === "Expense" && transaction.date) {
 
-                spent += Number(transaction.amount);
+                const transactionDate =
+                    new Date(transaction.date);
+
+
+                const transactionMonth =
+                    transactionDate.getMonth();
+
+
+                const transactionYear =
+                    transactionDate.getFullYear();
+
+
+                if (
+                    transactionMonth === currentMonth &&
+                    transactionYear === currentYear
+                ) {
+
+                    spent += Number(transaction.amount);
+
+                }
 
             }
 
         });
 
 
-        // Save budget
+        // =========================
+        // SAVE BUDGET
+        // =========================
 
         function saveBudget() {
 
@@ -212,13 +240,13 @@
             }
 
 
+            budget = Number(input);
+
+
             localStorage.setItem(
                 "monthlyBudget",
-                input
+                budget
             );
-
-
-            budget = Number(input);
 
 
             alert("Budget saved successfully!");
@@ -229,7 +257,9 @@
         }
 
 
-        // Display budget
+        // =========================
+        // DISPLAY BUDGET
+        // =========================
 
         function displayBudget() {
 
@@ -241,7 +271,8 @@
                 "₹" + spent;
 
 
-            const remaining = budget - spent;
+            const remaining =
+                budget - spent;
 
 
             document.getElementById("remainingAmount").textContent =
@@ -271,8 +302,6 @@
                     Math.min(percentage, 100) + "%";
 
 
-                // Budget message
-
                 const message =
                     document.getElementById("budgetMessage");
 
@@ -282,17 +311,23 @@
                     message.textContent =
                         "⚠️ You have exceeded your budget!";
 
-                } else if (percentage >= 90) {
+                }
+
+                else if (percentage >= 90) {
 
                     message.textContent =
                         "⚠️ You have used 90% of your budget.";
 
-                } else if (percentage >= 75) {
+                }
+
+                else if (percentage >= 75) {
 
                     message.textContent =
                         "⚠️ You are getting close to your budget.";
 
-                } else {
+                }
+
+                else {
 
                     message.textContent =
                         "✅ You are within your budget.";
@@ -301,10 +336,24 @@
 
             }
 
+            else {
+
+                document.getElementById("budgetPercentage")
+                    .textContent = "0%";
+
+
+                document.getElementById("budgetMessage")
+                    .textContent =
+                    "Set a budget to start tracking.";
+
+            }
+
         }
 
 
-        // Display when page loads
+        // =========================
+        // DISPLAY WHEN PAGE LOADS
+        // =========================
 
         displayBudget();
 
