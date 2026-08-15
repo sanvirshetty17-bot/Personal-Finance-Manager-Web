@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Monthly Report | Personal Finance Manager</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+
+    <nav>
+
+        <div class="logo">
+            💰 Finance Manager
+        </div>
+
+        <ul>
+
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+
+            <li>
+                <a href="dashboard.html">Dashboard</a>
+            </li>
+
+            <li>
+                <a href="add-transaction.html">Add Transaction</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- Report Header -->
+
+    <section class="dashboard-header">
+
+        <h1>Monthly Report</h1>
+
+        <p>Analyze your financial activity.</p>
+
+    </section>
+
+
+    <!-- Report Cards -->
+
+    <section class="cards">
+
+        <div class="card">
+
+            <i class="fa-solid fa-arrow-down"></i>
+
+            <h3>Total Income</h3>
+
+            <h2 id="reportIncome">₹0</h2>
+
+        </div>
+
+
+        <div class="card">
+
+            <i class="fa-solid fa-arrow-up"></i>
+
+            <h3>Total Expense</h3>
+
+            <h2 id="reportExpense">₹0</h2>
+
+        </div>
+
+
+        <div class="card">
+
+            <i class="fa-solid fa-wallet"></i>
+
+            <h3>Savings</h3>
+
+            <h2 id="reportBalance">₹0</h2>
+
+        </div>
+
+
+        <div class="card">
+
+            <i class="fa-solid fa-list"></i>
+
+            <h3>Transactions</h3>
+
+            <h2 id="reportTransactions">0</h2>
+
+        </div>
+
+    </section>
+
+
+    <!-- Highest Expense -->
+
+    <section class="chart-container">
+
+        <h2>Highest Expense Category</h2>
+
+        <h2 id="highestCategory">None</h2>
+
+    </section>
+
+
+    <!-- Back Button -->
+
+    <section class="actions">
+
+        <button onclick="window.location.href='dashboard.html'">
+            ← Back to Dashboard
+        </button>
+
+    </section>
+
+
+    <!-- Footer -->
+
+    <footer>
+    <p>© 2026 Personal Finance Manager</p>
+</footer>
+
+<script>
+
+const transactions =
+    JSON.parse(localStorage.getItem("transactions")) || [];
+
+let totalIncome = 0;
+let totalExpense = 0;
+
+let highestExpense = 0;
+let highestCategory = "None";
+
+const categoryTotals = {};
+
+
+// Calculate totals
+transactions.forEach(function(transaction) {
+
+    const amount = Number(transaction.amount);
+
+    if (transaction.type === "Income") {
+
+        totalIncome += amount;
+
+    } else if (transaction.type === "Expense") {
+
+        totalExpense += amount;
+
+        if (categoryTotals[transaction.category] === undefined) {
+            categoryTotals[transaction.category] = 0;
+        }
+
+        categoryTotals[transaction.category] += amount;
+    }
+
+});
+
+
+// Find highest expense category
+for (const category in categoryTotals) {
+
+    if (categoryTotals[category] > highestExpense) {
+
+        highestExpense = categoryTotals[category];
+        highestCategory = category;
+
+    }
+
+}
+
+
+// Display report
+
+document.getElementById("reportIncome").textContent =
+    "₹" + totalIncome;
+
+document.getElementById("reportExpense").textContent =
+    "₹" + totalExpense;
+
+document.getElementById("reportBalance").textContent =
+    "₹" + (totalIncome - totalExpense);
+
+document.getElementById("reportTransactions").textContent =
+    transactions.length;
+
+document.getElementById("highestCategory").textContent =
+    highestCategory + " (₹" + highestExpense + ")";
+
+
+console.log("REPORT WORKING");
+console.log(transactions);
+
+</script>
+
+</body>
+</html>
