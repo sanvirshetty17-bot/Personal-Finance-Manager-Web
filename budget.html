@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Budget | Personal Finance Manager</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+
+    <nav>
+
+        <div class="logo">
+            💰 Finance Manager
+        </div>
+
+        <ul>
+
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+
+            <li>
+                <a href="dashboard.html">Dashboard</a>
+            </li>
+
+            <li>
+                <a href="add-transaction.html">Add Transaction</a>
+            </li>
+
+            <li>
+                <a href="budget.html">Budget</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- Budget Header -->
+
+    <section class="dashboard-header">
+
+        <h1>Monthly Budget</h1>
+
+        <p>Set and track your monthly spending limit.</p>
+
+    </section>
+
+
+    <!-- Set Budget -->
+
+    <section class="chart-container">
+
+        <h2>Set Your Budget</h2>
+
+        <input
+            type="number"
+            id="budgetInput"
+            placeholder="Enter monthly budget"
+            min="1"
+        >
+
+        <br><br>
+
+        <button onclick="saveBudget()">
+            Save Budget
+        </button>
+
+    </section>
+
+
+    <!-- Budget Summary -->
+
+    <section class="cards">
+
+        <div class="card">
+
+            <i class="fa-solid fa-wallet"></i>
+
+            <h3>Monthly Budget</h3>
+
+            <h2 id="budgetAmount">₹0</h2>
+
+        </div>
+
+
+        <div class="card">
+
+            <i class="fa-solid fa-money-bill-wave"></i>
+
+            <h3>Total Spent</h3>
+
+            <h2 id="spentAmount">₹0</h2>
+
+        </div>
+
+
+        <div class="card">
+
+            <i class="fa-solid fa-piggy-bank"></i>
+
+            <h3>Remaining</h3>
+
+            <h2 id="remainingAmount">₹0</h2>
+
+        </div>
+
+    </section>
+
+
+    <!-- Progress -->
+
+    <section class="chart-container">
+
+        <h2>Budget Usage</h2>
+
+        <div class="progress-container">
+
+            <div id="budgetProgress"></div>
+
+        </div>
+
+        <h3 id="budgetPercentage">0%</h3>
+
+        <h3 id="budgetMessage">
+            Set a budget to start tracking.
+        </h3>
+
+    </section>
+
+
+    <!-- Back -->
+
+    <section class="actions">
+
+        <button onclick="window.location.href='dashboard.html'">
+            ← Back to Dashboard
+        </button>
+
+    </section>
+
+
+    <!-- Footer -->
+
+    <footer>
+
+        <p>© 2026 Personal Finance Manager</p>
+
+    </footer>
+
+
+    <!-- Budget JavaScript -->
+
+    <script>
+
+        // Load saved budget
+
+        let budget =
+            Number(localStorage.getItem("monthlyBudget")) || 0;
+
+
+        // Load transactions
+
+        const transactions =
+            JSON.parse(localStorage.getItem("transactions")) || [];
+
+
+        // Calculate total expenses
+
+        let spent = 0;
+
+
+        transactions.forEach(function(transaction) {
+
+            if (transaction.type === "Expense") {
+
+                spent += Number(transaction.amount);
+
+            }
+
+        });
+
+
+        // Save budget
+
+        function saveBudget() {
+
+            const input =
+                document.getElementById("budgetInput").value;
+
+
+            if (input === "" || Number(input) <= 0) {
+
+                alert("Please enter a valid budget.");
+
+                return;
+
+            }
+
+
+            localStorage.setItem(
+                "monthlyBudget",
+                input
+            );
+
+
+            budget = Number(input);
+
+
+            alert("Budget saved successfully!");
+
+
+            displayBudget();
+
+        }
+
+
+        // Display budget
+
+        function displayBudget() {
+
+            document.getElementById("budgetAmount").textContent =
+                "₹" + budget;
+
+
+            document.getElementById("spentAmount").textContent =
+                "₹" + spent;
+
+
+            const remaining = budget - spent;
+
+
+            document.getElementById("remainingAmount").textContent =
+                "₹" + remaining;
+
+
+            if (budget > 0) {
+
+                let percentage =
+                    (spent / budget) * 100;
+
+
+                percentage =
+                    Math.round(percentage);
+
+
+                document.getElementById("budgetPercentage")
+                    .textContent =
+                    percentage + "%";
+
+
+                const progress =
+                    document.getElementById("budgetProgress");
+
+
+                progress.style.width =
+                    Math.min(percentage, 100) + "%";
+
+
+                // Budget message
+
+                const message =
+                    document.getElementById("budgetMessage");
+
+
+                if (percentage >= 100) {
+
+                    message.textContent =
+                        "⚠️ You have exceeded your budget!";
+
+                } else if (percentage >= 90) {
+
+                    message.textContent =
+                        "⚠️ You have used 90% of your budget.";
+
+                } else if (percentage >= 75) {
+
+                    message.textContent =
+                        "⚠️ You are getting close to your budget.";
+
+                } else {
+
+                    message.textContent =
+                        "✅ You are within your budget.";
+
+                }
+
+            }
+
+        }
+
+
+        // Display when page loads
+
+        displayBudget();
+
+    </script>
+
+</body>
+
+</html>
